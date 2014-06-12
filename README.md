@@ -17,7 +17,7 @@ CMUT FUNCTIONS: [keep these four functions in the same directory]
 
 tuftsCMUTstates() - computes the state-derivatives for the cMUT simulation. For n-th order delay approximation, the output of this function is an nx1 matrix. 
 
-tuftsCMUToutput() - outputs the simulated sensor measurements for the height and velocity - [h_measured; v_measured]
+tuftsCMUToutput() - outputs the simulated sensor measurements for the height and velocity - [h_measured_; v_measured_]
 
 ssDelay() - converts the delay transfer functions into state space for a 2-2-MIMO system.
 
@@ -38,28 +38,29 @@ Notes:
 
 4. Basic Simulation function-call-tree
 
-main
-	|
-	|
-	|ode45(mastersim())
+```	
+	main()
 		|
-		|wpi_hv()
-		|tuftsCMUTstates()
-			|
-			|ssDelay() [order n]
-				|
-				|vajtadelay()
-			>> return state derivatives [nx1]
 		|
-		|tuftsCMUToutput()
+		|ode45(mastersim())
 			|
-			|ssDelay() [order n]
+			|wpi_hv()
+			|tuftsCMUTstates()
 				|
-				|vajtadelay()
-			>> return output [2x1] (i.e. height and velocity in that order)
-			
-NB: Because the time constant changes and the required independence of tuftsCMUToutput() and tuftsCMUTstates(), ssDelay() is called twice in every mastersim() call. 
-* This can be avoided by creating cMUT class instead of an independent function set
+				|ssDelay() [order n]
+					|
+					|vajtadelay()
+				>> return state derivatives [nx1]
+			|
+			|tuftsCMUToutput()
+				|
+				|ssDelay() [order n]
+					|
+					|vajtadelay()
+				>> return output [2x1] (i.e. height and velocity in that order)
+				```
+```	
+NB: Because the time constant changes and the required independence of tuftsCMUToutput() and tuftsCMUTstates(), ssDelay() is called twice in every mastersim() call. This can be avoided by creating cMUT class instead of an independent function set
 
 
 
